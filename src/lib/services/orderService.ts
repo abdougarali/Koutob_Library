@@ -135,6 +135,7 @@ export async function getAllOrders() {
   return orders.map((order) => ({
     ...order,
     _id: order._id?.toString(),
+    email: order.email ?? undefined, // Convert null to undefined
     createdAt: order.createdAt?.toISOString(),
     updatedAt: order.updatedAt?.toISOString(),
     confirmedAt: order.confirmedAt?.toISOString(),

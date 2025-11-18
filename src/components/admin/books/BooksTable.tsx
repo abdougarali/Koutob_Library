@@ -743,7 +743,7 @@ export function BooksTable({ initialBooks }: BooksTableProps) {
                   </label>
                   
                   <div className="flex flex-col gap-2">
-                    <ImageUploader images={images} onChange={setImages as any} />
+                    <ImageUploader images={images} onChange={setImages} />
                     <div className="text-[10px] text-[color:var(--color-foreground-muted)] sm:text-xs">
                       تلميح: سيتم استخدام الصورة الأساسية كـ imageUrl الأساسي أيضاً.
                     </div>

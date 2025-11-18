@@ -4,8 +4,8 @@ import { useCallback, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 type UploadedImage = {
-  publicId: string;
-  url: string;
+  publicId?: string;
+  url?: string;
   width?: number;
   height?: number;
   format?: string;
@@ -164,11 +164,13 @@ export function ImageUploader({ images, onChange }: ImageUploaderProps) {
 
       {images.length > 0 && (
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
-          {images.map((img, idx) => (
+          {images
+            .filter((img) => img.url) // Only show images with a URL
+            .map((img, idx) => (
             <div key={img.publicId || img.url || idx} className="relative rounded-xl border p-1.5 sm:p-2">
               <div className="relative h-24 w-full overflow-hidden rounded-lg bg-gray-100 sm:h-28">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={img.url} alt={`صورة ${idx + 1}`} className="h-full w-full object-cover" />
+                <img src={img.url!} alt={`صورة ${idx + 1}`} className="h-full w-full object-cover" />
               </div>
               <div className="mt-1.5 flex flex-col gap-1.5 sm:mt-2 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
                 <button

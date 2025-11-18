@@ -181,7 +181,7 @@ export async function POST(
       return NextResponse.json(
         {
           error: "بيانات غير صحيحة",
-          details: error.errors,
+          details: error.issues,
         },
         { status: 400 },
       );

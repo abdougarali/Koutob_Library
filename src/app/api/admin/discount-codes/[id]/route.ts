@@ -20,7 +20,7 @@ export async function PATCH(
   } catch (error: any) {
     if (error.name === "ZodError") {
       return NextResponse.json(
-        { error: "بيانات غير صحيحة", details: error.errors },
+        { error: "بيانات غير صحيحة", details: error.issues },
         { status: 400 },
       );
     }

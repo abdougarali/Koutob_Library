@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     console.error("Error creating delivery partner:", error);
     if (error.name === "ZodError") {
       return NextResponse.json(
-        { error: "بيانات غير صحيحة", details: error.errors },
+        { error: "بيانات غير صحيحة", details: error.issues },
         { status: 400 },
       );
     }

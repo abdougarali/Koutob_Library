@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     
     // Check if it's a ZodError
     if (error.name === "ZodError" || error.issues) {
-      const issues = error.issues || error.errors || [];
+      const issues = error.issues || [];
       const details = issues.map((err: any) => ({
         field: err.path?.join(".") || err.path || "unknown",
         message: err.message || "قيمة غير صحيحة",

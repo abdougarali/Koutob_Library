@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     if (error.name === "ZodError") {
       return NextResponse.json(
         {
-          error: error.errors?.[0]?.message || "بيانات غير صحيحة",
+          error: error.issues?.[0]?.message || "بيانات غير صحيحة",
         },
         { status: 400 },
       );

@@ -36,7 +36,7 @@ export async function PATCH(
     console.error("Error updating delivery partner:", error);
     if (error.name === "ZodError") {
       return NextResponse.json(
-        { error: "بيانات غير صحيحة", details: error.errors },
+        { error: "بيانات غير صحيحة", details: error.issues },
         { status: 400 },
       );
     }

@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            error.errors?.[0]?.message || "بيانات غير صحيحة. يرجى التحقق من الرمز.",
+            error.issues?.[0]?.message || "بيانات غير صحيحة. يرجى التحقق من الرمز.",
         },
         { status: 400 },
       );

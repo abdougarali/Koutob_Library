@@ -4,6 +4,8 @@ import { CustomerHeader } from "@/components/customer/CustomerHeader";
 import { CustomerSidebar } from "@/components/customer/CustomerSidebar";
 import { CustomerOrderTrackingClient } from "@/components/customer/CustomerOrderTrackingClient";
 import { notFound } from "next/navigation";
+import { dbConnect } from "@/lib/dbConnect";
+import { UserModel } from "@/lib/models/User";
 
 type CustomerOrderTrackingPageProps = {
   params: Promise<{
@@ -39,7 +41,11 @@ export default async function CustomerOrderTrackingPage({
   const orderEmail = order.email?.toLowerCase().trim();
   const orderPhone = order.phone?.trim();
   const userEmail = session.user.email?.toLowerCase().trim();
-  const userPhone = session.user.phone?.trim();
+  
+  // Fetch user from database to get phone number
+  await dbConnect();
+  const user = await UserModel.findById(session.user.id).select("phone").lean();
+  const userPhone = user?.phone?.trim();
 
   const belongsToCustomer =
     (orderEmail && userEmail && orderEmail === userEmail) ||

@@ -149,23 +149,14 @@ export async function getAllOrders() {
           _id:
             typeof order.deliveryPartner === "object" &&
             "_id" in order.deliveryPartner
-              ? order.deliveryPartner._id?.toString()
-              : null,
+              ? order.deliveryPartner._id?.toString() ?? undefined
+              : undefined,
           name:
             typeof order.deliveryPartner === "object" &&
-            "name" in order.deliveryPartner
+            "name" in order.deliveryPartner &&
+            typeof order.deliveryPartner.name === "string"
               ? order.deliveryPartner.name
-              : null,
-          contactName:
-            typeof order.deliveryPartner === "object" &&
-            "contactName" in order.deliveryPartner
-              ? order.deliveryPartner.contactName
-              : null,
-          contactPhone:
-            typeof order.deliveryPartner === "object" &&
-            "contactPhone" in order.deliveryPartner
-              ? order.deliveryPartner.contactPhone
-              : null,
+              : undefined,
         }
       : null,
     statusHistory: order.statusHistory?.map((entry) => ({

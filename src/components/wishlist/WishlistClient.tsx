@@ -131,7 +131,7 @@ export function WishlistClient() {
         {wishlist.map((item) => {
           const book = item.book;
           const hasDiscount = book.salePrice && book.salePrice > 0 && book.salePrice < book.price;
-          const displayPrice = hasDiscount ? book.salePrice : book.price;
+          const displayPrice = hasDiscount && book.salePrice ? book.salePrice : book.price;
 
           return (
             <div

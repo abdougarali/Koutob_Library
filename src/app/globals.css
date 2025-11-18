@@ -2,25 +2,118 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0a6e5c;
+  --primary: #0a6e5c;
+  --primary-foreground: #ffffff;
+  --accent: #b88a44;
+  --surface-muted: #f5f5f5;
+  --foreground-muted: #666666;
+  --shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground-muted: var(--foreground-muted);
+  --shadow-elevated: var(--shadow-elevated);
+  --font-sans: var(--font-tajawal), var(--font-cairo), sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-tajawal), var(--font-cairo), sans-serif;
+  direction: rtl;
+}
+
+/* Responsive select dropdown styling for mobile */
+@layer utilities {
+  /* Make native select dropdowns more mobile-friendly */
+  select {
+    /* Ensure minimum touch target size on mobile */
+    min-height: 44px;
+  }
+
+  /* Improve select dropdown appearance on mobile */
+  @media (max-width: 640px) {
+    select {
+      font-size: 16px; /* Prevents zoom on iOS */
+      width: 100%;
+      max-width: 100%;
+    }
+    
+    /* Make select options more readable on mobile */
+    select option {
+      padding: 0.75rem;
+      font-size: 16px;
+      min-height: 44px;
+      line-height: 1.5;
+      width: 100%;
+    }
+  }
+  
+  /* Ensure select dropdown options match select width */
+  select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Better select styling for all screen sizes */
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: left 0.75rem center;
+    background-size: 1.5em;
+    padding-right: 2.5rem;
+  }
+}
+
+/* Ensure dropdowns don't get cut off on mobile */
+@media (max-width: 640px) {
+  /* Fix dropdown positioning on mobile - prevent overflow */
+  [class*="absolute"][class*="z-50"][class*="top-full"] {
+    max-width: calc(100vw - 1rem) !important;
+    left: auto !important;
+    right: 0 !important;
+  }
+  
+  /* Ensure dropdowns are scrollable if too tall */
+  [class*="overflow-y-auto"] {
+    max-height: calc(100vh - 6rem) !important;
+  }
+  
+  /* Better touch targets for all interactive elements */
+  button, a, input, select, textarea {
+    -webkit-tap-highlight-color: rgba(10, 110, 92, 0.15);
+  }
+  
+  /* Prevent text size adjustment on iOS */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+  
+  /* Better spacing for mobile */
+  section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Improve dropdown list items on mobile */
+  [class*="dropdown"] button,
+  [class*="absolute"][class*="top-full"] button {
+    min-height: 44px;
+    padding: 0.625rem 0.75rem;
+  }
+  
+  /* Better dropdown shadows on mobile */
+  [class*="absolute"][class*="z-50"] {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  }
+  
 }

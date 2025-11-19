@@ -466,21 +466,28 @@ export function BooksTable({ initialBooks }: BooksTableProps) {
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-2">
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${
-                      book.status === "published"
-                        ? "bg-green-100 text-green-700"
+                  <div className="flex items-center gap-1.5">
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                        book.status === "published"
+                          ? "bg-green-100 text-green-700"
+                          : book.status === "draft"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-gray-100 text-gray-700"
+                      }`}
+                    >
+                      {book.status === "published"
+                        ? "منشور"
                         : book.status === "draft"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    {book.status === "published"
-                      ? "منشور"
-                      : book.status === "draft"
-                        ? "مسودة"
-                        : "مؤرشف"}
-                  </span>
+                          ? "مسودة"
+                          : "مؤرشف"}
+                    </span>
+                    {book.isFeatured && (
+                      <span className="rounded-full bg-[color:var(--color-primary)]/10 px-2 py-0.5 text-[10px] font-medium text-[color:var(--color-primary)]">
+                        مميز
+                      </span>
+                    )}
+                  </div>
                   <div className="flex gap-1.5">
                     <button
                       onClick={() => handleOpen(book)}
@@ -524,6 +531,9 @@ export function BooksTable({ initialBooks }: BooksTableProps) {
               </th>
               <th className="px-4 py-3 text-right text-sm font-semibold text-[color:var(--color-foreground)]">
                 الحالة
+              </th>
+              <th className="px-4 py-3 text-right text-sm font-semibold text-[color:var(--color-foreground)]">
+                مميز
               </th>
               <th className="px-4 py-3 text-right text-sm font-semibold text-[color:var(--color-foreground)]">
                 الإجراءات
@@ -573,6 +583,17 @@ export function BooksTable({ initialBooks }: BooksTableProps) {
                         ? "مسودة"
                         : "مؤرشف"}
                   </span>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center justify-center">
+                    {book.isFeatured ? (
+                      <span className="rounded-full bg-[color:var(--color-primary)]/10 px-2.5 py-1 text-xs font-medium text-[color:var(--color-primary)]">
+                        ⭐ نعم
+                      </span>
+                    ) : (
+                      <span className="text-xs text-[color:var(--color-foreground-muted)]">—</span>
+                    )}
+                  </div>
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex gap-2">
@@ -723,6 +744,24 @@ export function BooksTable({ initialBooks }: BooksTableProps) {
                     placeholder="اختر الحالة"
                     className="[&>button]:rounded-xl [&>button]:border-gray-300 [&>button]:px-3 [&>button]:py-2.5 [&>button]:text-sm sm:[&>button]:px-4 sm:[&>button]:py-2"
                   />
+                  <div className="col-span-2">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={formData.isFeatured || false}
+                        onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
+                        className="h-5 w-5 rounded border-gray-300 text-[color:var(--color-primary)] focus:ring-2 focus:ring-[color:var(--color-primary)] focus:ring-offset-2 cursor-pointer"
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium text-[color:var(--color-foreground)]">
+                          كتاب مميز
+                        </span>
+                        <span className="text-xs text-[color:var(--color-foreground-muted)]">
+                          سيظهر في قسم "اكتشف مجموعتنا المميزة" في الصفحة الرئيسية
+                        </span>
+                      </div>
+                    </label>
+                  </div>
                 </div>
 
                 <div>

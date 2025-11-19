@@ -36,6 +36,7 @@ export default async function HomePage() {
           price: book.price ?? 0,
           salePrice: book.salePrice,
           imageUrl: book.imageUrl,
+          stock: book.stock,
         }))
       : fallbackBooks;
 

@@ -23,11 +23,13 @@ export function AddToCartButton({
   const addItem = useCartStore((state) => state.addItem);
   const items = useCartStore((state) => state.items);
 
-  const stock = book.stock ?? 0;
+  // If stock is undefined, treat it as available (unlimited stock)
+  // Only show "out of stock" if stock is explicitly 0 or less
+  const stock = book.stock;
   const currentQuantity = items.find((item) => item.id === book.id)?.quantity ?? 0;
-  const availableStock = stock - currentQuantity;
-  const isOutOfStock = stock <= 0;
-  const cannotAddMore = availableStock <= 0;
+  const availableStock = stock !== undefined ? stock - currentQuantity : Infinity;
+  const isOutOfStock = stock !== undefined && stock <= 0;
+  const cannotAddMore = stock !== undefined && availableStock <= 0;
 
   const handleAddToCart = async () => {
     if (isOutOfStock) {
@@ -61,9 +63,10 @@ export function AddToCartButton({
       <button
         type="button"
         disabled
-        className={`min-h-[44px] rounded-full bg-gray-300 px-4 py-2.5 text-xs font-semibold text-gray-600 cursor-not-allowed sm:px-5 sm:py-2 sm:text-sm ${className || ""}`}
+        className={`flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-gray-300 px-2.5 py-1.5 text-[10px] font-semibold text-gray-600 cursor-not-allowed sm:min-h-[40px] sm:min-w-[40px] sm:px-3 sm:py-2 sm:text-xs md:min-h-[44px] md:px-4 md:py-2.5 md:text-sm ${className || ""}`}
       >
-        غير متوفر
+        <span className="hidden sm:inline">غير متوفر</span>
+        <span className="sm:hidden">نفد</span>
       </button>
     );
   }
@@ -73,9 +76,14 @@ export function AddToCartButton({
       type="button"
       onClick={handleAddToCart}
       disabled={isAdding || cannotAddMore}
-      className={`min-h-[44px] rounded-full bg-[color:var(--color-primary)] px-4 py-2.5 text-xs font-semibold text-[color:var(--color-primary-foreground)] transition active:opacity-80 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed sm:px-5 sm:py-2 sm:text-sm ${className || ""}`}
+      className={`flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-[color:var(--color-primary)] px-2.5 py-1.5 text-[10px] font-semibold text-[color:var(--color-primary-foreground)] transition active:opacity-80 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed sm:min-h-[40px] sm:min-w-[40px] sm:px-3 sm:py-2 sm:text-xs md:min-h-[44px] md:px-4 md:py-2.5 md:text-sm ${className || ""}`}
     >
-      {isAdding ? "جاري الإضافة..." : cannotAddMore ? "الكمية المتاحة محدودة" : "أضف إلى السلة"}
+      <span className="hidden sm:inline">
+        {isAdding ? "جاري الإضافة..." : cannotAddMore ? "الكمية المتاحة محدودة" : "أضف إلى السلة"}
+      </span>
+      <span className="sm:hidden">
+        {isAdding ? "..." : cannotAddMore ? "محدود" : "أضف"}
+      </span>
     </button>
   );
 }

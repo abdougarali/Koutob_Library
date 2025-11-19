@@ -42,9 +42,9 @@ function BookCardComponent({
   const isLowStock = stock !== undefined && stock > 0 && stock <= 10;
 
   return (
-    <div className="flex flex-col gap-2 rounded-xl border border-[rgba(184,138,68,0.16)] bg-white p-3 shadow-sm transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)] sm:gap-3 sm:rounded-2xl sm:p-4">
-      <div className="relative">
-        <Link href={href} className="group flex flex-col gap-2 sm:gap-3">
+    <div className="flex h-full flex-col gap-2 rounded-xl border border-[rgba(184,138,68,0.16)] bg-white p-3 shadow-sm transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)] sm:gap-3 sm:rounded-2xl sm:p-4">
+      <div className="relative flex flex-1 flex-col">
+        <Link href={href} className="group flex flex-1 flex-col gap-2 sm:gap-3">
           <div className="relative h-40 w-full overflow-hidden rounded-lg bg-[color:var(--color-surface-muted)] sm:h-48 sm:rounded-xl">
             <Image
               src={imageUrl}
@@ -61,7 +61,7 @@ function BookCardComponent({
               </div>
             )}
           </div>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-1 flex-col gap-1">
             <span className="text-xs font-medium text-[color:var(--color-primary)]">
               {category}
             </span>
@@ -72,7 +72,7 @@ function BookCardComponent({
               {author}
             </p>
             {averageRating && averageRating > 0 && (
-              <div className="flex items-center gap-2 mt-1">
+              <div className="mt-1 flex items-center gap-2">
                 <StarRating rating={averageRating} size="sm" />
                 <span className="text-xs text-gray-600">
                   ({totalReviews || 0})
@@ -85,18 +85,18 @@ function BookCardComponent({
           <WishlistButton bookId={id} size="sm" />
         </div>
       </div>
-      <div className="mt-1 flex items-center justify-between">
-        <div className="flex flex-col gap-1">
+      <div className="mt-2 flex items-center justify-between gap-2">
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
           {hasDiscount ? (
             <>
-              <span className="text-base font-bold text-[color:var(--color-primary)]">
+              <span className="text-sm font-bold text-[color:var(--color-primary)] sm:text-base">
                 {displayPrice.toLocaleString("ar-TN", {
                   style: "currency",
                   currency: "TND",
                   maximumFractionDigits: 3,
                 })}
               </span>
-              <span className="text-xs text-[color:var(--color-foreground-muted)] line-through">
+              <span className="text-[10px] text-[color:var(--color-foreground-muted)] line-through sm:text-xs">
                 {price.toLocaleString("ar-TN", {
                   style: "currency",
                   currency: "TND",
@@ -105,7 +105,7 @@ function BookCardComponent({
               </span>
             </>
           ) : (
-            <span className="text-base font-bold text-[color:var(--color-foreground)]">
+            <span className="text-sm font-bold text-[color:var(--color-foreground)] sm:text-base">
               {displayPrice.toLocaleString("ar-TN", {
                 style: "currency",
                 currency: "TND",
@@ -123,7 +123,7 @@ function BookCardComponent({
               imageUrl,
               stock,
             }}
-            className="px-3 py-2 text-xs sm:px-5 sm:text-sm"
+            className="flex-shrink-0"
           />
         )}
       </div>

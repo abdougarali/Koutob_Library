@@ -27,7 +27,7 @@ export function BackButton({
   }
 
   const baseClasses = floating
-    ? "fixed bottom-4 right-4 z-50 flex min-h-[40px] min-w-[40px] items-center justify-center gap-1.5 rounded-full bg-[color:var(--color-primary)]/90 px-3.5 py-2 text-xs font-medium text-white shadow-md backdrop-blur-sm transition-all duration-200 hover:bg-[color:var(--color-primary)] hover:shadow-lg active:scale-95 sm:bottom-5 sm:right-5 sm:min-h-[44px] sm:min-w-[44px] sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm md:bottom-6 md:right-6"
+    ? "fixed bottom-4 right-4 z-[9999] flex min-h-[40px] min-w-[40px] items-center justify-center gap-1.5 rounded-full bg-[#0a6e5c]/90 px-3.5 py-2 text-xs font-medium text-white shadow-md backdrop-blur-sm transition-all duration-200 hover:bg-[#0a6e5c] hover:shadow-lg active:scale-95 sm:bottom-5 sm:right-5 sm:min-h-[44px] sm:min-w-[44px] sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm md:bottom-6 md:right-6"
     : "inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:scale-105 active:scale-95";
   
   const variantClasses = {

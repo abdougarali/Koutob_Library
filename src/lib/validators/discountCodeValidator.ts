@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+const coerceNumber = (message: string) =>
+  z
+    .coerce.number()
+    .refine((val) => !Number.isNaN(val), message);
+
 export const discountCodeInputSchema = z
   .object({
     code: z
@@ -9,26 +14,20 @@ export const discountCodeInputSchema = z
       .regex(/^[A-Za-z0-9-_]+$/, "يمكن استخدام الحروف والأرقام والخط العلوي فقط"),
     description: z.string().max(200, "الوصف طويل جداً").optional(),
     type: z.enum(["percentage", "fixed"]),
-    value: z.coerce
-      .number({
-        invalid_type_error: "قيمة الخصم غير صالحة",
-      })
-      .positive("قيمة الخصم يجب أن تكون أكبر من صفر"),
-    minOrderTotal: z
-      .coerce.number({ invalid_type_error: "قيمة الحد الأدنى غير صالحة" })
+    value: coerceNumber("قيمة الخصم غير صالحة").positive(
+      "قيمة الخصم يجب أن تكون أكبر من صفر",
+    ),
+    minOrderTotal: coerceNumber("قيمة الحد الأدنى غير صالحة")
       .min(0, "قيمة الحد الأدنى يجب أن تكون موجبة")
       .default(0),
-    maxDiscountAmount: z
-      .coerce.number({ invalid_type_error: "قيمة الخصم القصوى غير صالحة" })
+    maxDiscountAmount: coerceNumber("قيمة الخصم القصوى غير صالحة")
       .min(0, "قيمة الخصم القصوى يجب أن تكون موجبة")
       .optional(),
-    usageLimit: z
-      .coerce.number({ invalid_type_error: "قيمة الحد الأقصى للاستخدام غير صالحة" })
+    usageLimit: coerceNumber("قيمة الحد الأقصى للاستخدام غير صالحة")
       .int("يجب أن يكون عدداً صحيحاً")
       .min(1, "يجب أن يكون 1 على الأقل")
       .optional(),
-    perUserLimit: z
-      .coerce.number({ invalid_type_error: "قيمة الحد لكل مستخدم غير صالحة" })
+    perUserLimit: coerceNumber("قيمة الحد لكل مستخدم غير صالحة")
       .int("يجب أن يكون عدداً صحيحاً")
       .min(1, "يجب أن يكون 1 على الأقل")
       .optional(),
@@ -61,6 +60,7 @@ export const discountCodeInputSchema = z
   });
 
 export type DiscountCodeInput = z.infer<typeof discountCodeInputSchema>;
+
 
 
 

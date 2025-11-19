@@ -41,7 +41,8 @@ async function getBooksByCategory(
     author: book.author,
     category: book.category || "",
     price: book.price,
-    salePrice: book.salePrice,
+    salePrice:
+      typeof book.salePrice === "number" ? book.salePrice : undefined,
     imageUrl: book.imageUrl,
     stock: book.stock ?? 0,
   }));
@@ -74,7 +75,8 @@ async function getBooksByAuthor(
     author: book.author,
     category: book.category || "",
     price: book.price,
-    salePrice: book.salePrice,
+    salePrice:
+      typeof book.salePrice === "number" ? book.salePrice : undefined,
     imageUrl: book.imageUrl,
     stock: book.stock ?? 0,
   }));
@@ -120,6 +122,7 @@ export async function getRelatedBooks(
   // Convert map to array and limit results
   return Array.from(bookMap.values()).slice(0, limit);
 }
+
 
 
 

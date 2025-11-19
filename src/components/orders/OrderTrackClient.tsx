@@ -25,6 +25,8 @@ type OrderData = {
   }>;
   subtotal: number;
   deliveryFees: number;
+  discountCode?: string;
+  discountAmount?: number;
   total: number;
   deliveryPartner?: {
     name: string;
@@ -433,6 +435,20 @@ export function OrderTrackClient({ initialCode }: OrderTrackClientProps) {
                   })}
                 </span>
               </div>
+              {selectedOrder.discountCode && selectedOrder.discountAmount && selectedOrder.discountAmount > 0 && (
+                <div className="flex items-center justify-between text-[color:var(--color-primary)]">
+                  <span>
+                    خصم ({selectedOrder.discountCode})
+                  </span>
+                  <span>
+                    -{selectedOrder.discountAmount.toLocaleString("ar-TN", {
+                      style: "currency",
+                      currency: "TND",
+                      maximumFractionDigits: 3,
+                    })}
+                  </span>
+                </div>
+              )}
               <div className="flex items-center justify-between text-[color:var(--color-foreground-muted)]">
                 <span>رسوم التوصيل</span>
                 <span>

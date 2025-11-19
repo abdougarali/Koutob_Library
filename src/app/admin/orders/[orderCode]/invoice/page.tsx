@@ -69,6 +69,14 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
           <span>المجموع الفرعي</span>
           <span>{Number(order.subtotal ?? 0).toFixed(3)} د.ت</span>
         </div>
+        {order.discountCode && order.discountAmount && order.discountAmount > 0 && (
+          <div className="mb-2 flex justify-between text-[color:var(--color-primary)]">
+            <span>
+              خصم ({order.discountCode})
+            </span>
+            <span>-{Number(order.discountAmount ?? 0).toFixed(3)} د.ت</span>
+          </div>
+        )}
         <div className="mb-2 flex justify-between">
           <span>مصاريف التوصيل</span>
           <span>{Number(order.deliveryFees ?? 0).toFixed(3)} د.ت</span>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProviderWrapper } from "@/components/providers/SessionProviderWrapper";
+import { ToasterProvider } from "@/components/providers/ToasterProvider";
 import { MainHeader } from "@/components/layout/MainHeader";
 import { MainFooter } from "@/components/layout/MainFooter";
 import { BackButton } from "@/components/shared/BackButton";
@@ -38,6 +39,7 @@ export default function RootLayout({
             <MainFooter />
             <BackButton floating />
           </div>
+          <ToasterProvider />
         </SessionProviderWrapper>
       </body>
     </html>

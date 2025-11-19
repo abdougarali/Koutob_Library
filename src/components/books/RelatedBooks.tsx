@@ -28,7 +28,7 @@ export function RelatedBooks({
   bookSlug,
   category,
   author,
-  limit = 6,
+  limit = 3,
 }: RelatedBooksProps) {
   const [books, setBooks] = useState<RelatedBook[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,7 +60,7 @@ export function RelatedBooks({
         <h2 className="text-xl font-bold text-[color:var(--color-foreground)] sm:text-2xl">
           قد يعجبك أيضاً
         </h2>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
@@ -81,7 +81,7 @@ export function RelatedBooks({
       <h2 className="text-xl font-bold text-[color:var(--color-foreground)] sm:text-2xl">
         قد يعجبك أيضاً
       </h2>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         {books.map((book) => (
           <BookCard
             key={book._id}
@@ -100,6 +100,10 @@ export function RelatedBooks({
     </section>
   );
 }
+
+
+
+
 
 
 

@@ -23,16 +23,40 @@ async function getBooksByCategory(
 ): Promise<RelatedBook[]> {
   await dbConnect();
 
-  const books = await BookModel.find({
+  // First try to get in-stock books
+  let books = await BookModel.find({
     category,
     slug: { $ne: excludeSlug },
     status: "published",
-    stock: { $gt: 0 }, // Only in-stock books
+    stock: { $gt: 0 },
   })
     .select("slug title author category price salePrice imageUrl stock")
     .limit(limit)
     .sort({ createdAt: -1 })
     .lean();
+
+  // If not enough books, include out-of-stock books too
+  if (books.length < limit) {
+    const allCategoryBooks = await BookModel.find({
+      category,
+      slug: { $ne: excludeSlug },
+      status: "published",
+    })
+      .select("slug title author category price salePrice imageUrl stock")
+      .limit(limit)
+      .sort({ createdAt: -1 })
+      .lean();
+    
+    // Combine and deduplicate
+    const bookMap = new Map<string, any>();
+    books.forEach(book => bookMap.set(book.slug, book));
+    allCategoryBooks.forEach(book => {
+      if (!bookMap.has(book.slug) && bookMap.size < limit) {
+        bookMap.set(book.slug, book);
+      }
+    });
+    books = Array.from(bookMap.values());
+  }
 
   return books.map((book) => {
     const salePrice =
@@ -89,8 +113,44 @@ async function getBooksByAuthor(
 }
 
 /**
+ * Get any published books as fallback (excluding the current book)
+ */
+async function getAnyPublishedBooks(
+  excludeSlug: string,
+  limit: number = 6,
+): Promise<RelatedBook[]> {
+  await dbConnect();
+
+  const books = await BookModel.find({
+    slug: { $ne: excludeSlug },
+    status: "published",
+  })
+    .select("slug title author category price salePrice imageUrl stock")
+    .limit(limit)
+    .sort({ createdAt: -1 })
+    .lean();
+
+  return books.map((book) => {
+    const salePrice =
+      typeof book.salePrice === "number" ? book.salePrice : undefined;
+    return {
+      _id: book._id?.toString() || "",
+      slug: book.slug,
+      title: book.title,
+      author: book.author,
+      category: book.category || "",
+      price: book.price,
+      salePrice,
+      imageUrl: book.imageUrl,
+      stock: book.stock ?? 0,
+    };
+  });
+}
+
+/**
  * Get related books for a given book
  * Combines books from same category and same author, removes duplicates
+ * Falls back to any published books if no related books found
  * @param bookSlug - Slug of the current book
  * @param category - Category of the current book
  * @param author - Author of the current book
@@ -122,6 +182,16 @@ export async function getRelatedBooks(
   for (const book of authorBooks) {
     if (!bookMap.has(book.slug) && bookMap.size < limit) {
       bookMap.set(book.slug, book);
+    }
+  }
+
+  // If we don't have enough books, fill with any published books as fallback
+  if (bookMap.size < limit) {
+    const fallbackBooks = await getAnyPublishedBooks(bookSlug, limit);
+    for (const book of fallbackBooks) {
+      if (!bookMap.has(book.slug) && bookMap.size < limit) {
+        bookMap.set(book.slug, book);
+      }
     }
   }
 

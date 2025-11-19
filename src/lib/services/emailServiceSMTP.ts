@@ -224,6 +224,75 @@ export async function sendVerificationEmailSMTP(
   });
 }
 
+export interface ContactMessageData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+export async function sendContactMessageEmail(
+  data: ContactMessageData
+): Promise<boolean> {
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_USER || "admin@koutob.com";
+  
+  const html = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="ar">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>رسالة جديدة من صفحة الاتصال</title>
+    </head>
+    <body style="font-family: 'Tajawal', Arial, sans-serif; direction: rtl; background-color: #f5f5f5; padding: 20px;">
+      <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h1 style="color: #0a6e5c; text-align: center; margin-bottom: 20px;">رسالة جديدة من صفحة الاتصال</h1>
+        
+        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
+          <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 10px 0;">
+            <strong>الاسم:</strong> ${data.name}
+          </p>
+          <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 10px 0;">
+            <strong>البريد الإلكتروني:</strong> <a href="mailto:${data.email}" style="color: #0a6e5c;">${data.email}</a>
+          </p>
+          <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 10px 0;">
+            <strong>الموضوع:</strong> ${data.subject}
+          </p>
+        </div>
+        
+        <div style="background-color: #ffffff; border: 1px solid #e0e0e0; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
+          <h2 style="color: #0a6e5c; font-size: 18px; margin-bottom: 10px;">الرسالة:</h2>
+          <p style="color: #333; font-size: 16px; line-height: 1.8; white-space: pre-wrap;">${data.message}</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+          <a href="mailto:${data.email}" style="display: inline-block; background-color: #0a6e5c; color: #ffffff; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px;">
+            الرد على الرسالة
+          </a>
+        </div>
+        
+        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+        
+        <p style="color: #999; font-size: 12px; text-align: center;">
+          مكتبة كتب الإسلامية | Koutob
+        </p>
+      </div>
+    </body>
+    </html>
+  `;
+
+  return sendEmailSMTP({
+    to: adminEmail,
+    subject: `رسالة جديدة من صفحة الاتصال: ${data.subject}`,
+    html,
+    from: process.env.SMTP_USER || process.env.SMTP_FROM_EMAIL,
+  });
+}
+
+
+
+
+
 
 
 

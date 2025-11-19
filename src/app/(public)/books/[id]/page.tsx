@@ -199,7 +199,7 @@ export default async function BookDetailsPage({ params }: BookPageProps) {
         bookSlug={book.id}
         category={book.category}
         author={book.author}
-        limit={6}
+        limit={3}
       />
     </div>
   );

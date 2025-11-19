@@ -4,6 +4,7 @@ import "./globals.css";
 import { SessionProviderWrapper } from "@/components/providers/SessionProviderWrapper";
 import { MainHeader } from "@/components/layout/MainHeader";
 import { MainFooter } from "@/components/layout/MainFooter";
+import { BackButton } from "@/components/shared/BackButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
             <MainHeader />
             <main className="flex-1">{children}</main>
             <MainFooter />
+            <BackButton floating />
           </div>
         </SessionProviderWrapper>
       </body>

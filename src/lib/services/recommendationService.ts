@@ -34,18 +34,21 @@ async function getBooksByCategory(
     .sort({ createdAt: -1 })
     .lean();
 
-  return books.map((book) => ({
-    _id: book._id?.toString() || "",
-    slug: book.slug,
-    title: book.title,
-    author: book.author,
-    category: book.category || "",
-    price: book.price,
-    salePrice:
-      typeof book.salePrice === "number" ? book.salePrice : undefined,
-    imageUrl: book.imageUrl,
-    stock: book.stock ?? 0,
-  }));
+  return books.map((book) => {
+    const salePrice =
+      typeof book.salePrice === "number" ? book.salePrice : undefined;
+    return {
+      _id: book._id?.toString() || "",
+      slug: book.slug,
+      title: book.title,
+      author: book.author,
+      category: book.category || "",
+      price: book.price,
+      salePrice,
+      imageUrl: book.imageUrl,
+      stock: book.stock ?? 0,
+    };
+  });
 }
 
 /**
@@ -68,18 +71,21 @@ async function getBooksByAuthor(
     .sort({ createdAt: -1 })
     .lean();
 
-  return books.map((book) => ({
-    _id: book._id?.toString() || "",
-    slug: book.slug,
-    title: book.title,
-    author: book.author,
-    category: book.category || "",
-    price: book.price,
-    salePrice:
-      typeof book.salePrice === "number" ? book.salePrice : undefined,
-    imageUrl: book.imageUrl,
-    stock: book.stock ?? 0,
-  }));
+  return books.map((book) => {
+    const salePrice =
+      typeof book.salePrice === "number" ? book.salePrice : undefined;
+    return {
+      _id: book._id?.toString() || "",
+      slug: book.slug,
+      title: book.title,
+      author: book.author,
+      category: book.category || "",
+      price: book.price,
+      salePrice,
+      imageUrl: book.imageUrl,
+      stock: book.stock ?? 0,
+    };
+  });
 }
 
 /**

@@ -4,6 +4,7 @@ import {
   models,
   type InferSchemaType,
   type Model,
+  type Types,
 } from "mongoose";
 
 const DiscountUsageSchema = new Schema(
@@ -59,11 +60,16 @@ const DiscountCodeSchema = new Schema(
 DiscountCodeSchema.index({ code: 1 });
 DiscountCodeSchema.index({ isActive: 1, startDate: 1, endDate: 1 });
 
-export type DiscountCodeDocument = InferSchemaType<typeof DiscountCodeSchema>;
+export type DiscountCodeDocument = InferSchemaType<typeof DiscountCodeSchema> & {
+  _id: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export const DiscountCodeModel =
   (models.DiscountCode as Model<DiscountCodeDocument>) ||
   model<DiscountCodeDocument>("DiscountCode", DiscountCodeSchema);
+
 
 
 

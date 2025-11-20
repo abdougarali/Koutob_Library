@@ -47,12 +47,27 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
   return sendEmailSMTP(options);
 }
 
+const LOCAL_FALLBACK_URL = "http://localhost:3002";
+
+function getAppBaseUrl(): string {
+  const trimmed = (value?: string | null) => value?.trim();
+
+  return (
+    trimmed(process.env.NEXT_PUBLIC_SITE_URL) ||
+    trimmed(process.env.NEXT_PUBLIC_BASE_URL) ||
+    trimmed(process.env.NEXTAUTH_URL) ||
+    (trimmed(process.env.VERCEL_URL) ? `https://${trimmed(process.env.VERCEL_URL)}` : undefined) ||
+    LOCAL_FALLBACK_URL
+  );
+}
+
 export async function sendPasswordResetEmail(
   email: string,
   resetToken: string,
   userName?: string
 ): Promise<boolean> {
-  const resetUrl = `${process.env.NEXTAUTH_URL || "http://localhost:3002"}/reset-password/${resetToken}`;
+  const baseUrl = getAppBaseUrl();
+  const resetUrl = `${baseUrl}/reset-password/${resetToken}`;
   
   const html = `
     <!DOCTYPE html>
@@ -113,7 +128,8 @@ export async function sendVerificationEmail(
   verificationToken: string,
   userName?: string
 ): Promise<boolean> {
-  const verificationUrl = `${process.env.NEXTAUTH_URL || "http://localhost:3002"}/verify-email/${verificationToken}`;
+  const baseUrl = getAppBaseUrl();
+  const verificationUrl = `${baseUrl}/verify-email/${verificationToken}`;
   
   const html = `
     <!DOCTYPE html>
@@ -183,6 +199,7 @@ export async function sendOrderConfirmationEmail(
     phone: string;
   }
 ): Promise<boolean> {
+  const baseUrl = getAppBaseUrl();
   const itemsHtml = orderData.items
     .map(
       (item) => `
@@ -276,7 +293,7 @@ export async function sendOrderConfirmationEmail(
           يمكنك متابعة حالة طلبك من خلال الرابط التالي:
         </p>
         <p style="color: #0a6e5c; font-size: 12px; word-break: break-all; background-color: #f5f5f5; padding: 10px; border-radius: 4px;">
-          ${process.env.NEXTAUTH_URL || "http://localhost:3002"}/orders/track?code=${orderData.orderCode}
+          ${baseUrl}/orders/track?code=${orderData.orderCode}
         </p>
         
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
@@ -369,6 +386,7 @@ export async function sendOrderStatusUpdateEmail(
     note?: string;
   }
 ): Promise<boolean> {
+  const baseUrl = getAppBaseUrl();
   const statusMessages: Record<string, { title: string; message: string; color: string }> = {
     "قيد المعالجة": {
       title: "قيد المعالجة",
@@ -442,7 +460,7 @@ export async function sendOrderStatusUpdateEmail(
           يمكنك متابعة حالة طلبك من خلال الرابط التالي:
         </p>
         <p style="color: #0a6e5c; font-size: 12px; word-break: break-all; background-color: #f5f5f5; padding: 10px; border-radius: 4px;">
-          ${process.env.NEXTAUTH_URL || "http://localhost:3002"}/orders/track?code=${orderData.orderCode}
+          ${baseUrl}/orders/track?code=${orderData.orderCode}
         </p>
         
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">

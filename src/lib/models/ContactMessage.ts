@@ -3,6 +3,7 @@ import {
   Schema,
   model,
   models,
+  type Model,
 } from "mongoose";
 
 const ContactMessageSchema = new Schema(
@@ -30,6 +31,6 @@ export type ContactMessageDocument = InferSchemaType<typeof ContactMessageSchema
 };
 
 export const ContactMessageModel =
-  (models.ContactMessage as ReturnType<typeof model<ContactMessageDocument>>) ||
+  (models.ContactMessage as Model<ContactMessageDocument>) ||
   model<ContactMessageDocument>("ContactMessage", ContactMessageSchema);
 

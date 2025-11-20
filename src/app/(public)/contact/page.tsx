@@ -47,7 +47,7 @@ export default function ContactPage() {
               (t) => (
                 <div className="text-sm" dir="rtl">
                   <div className="font-semibold mb-2">يرجى تصحيح الأخطاء التالية:</div>
-                  <div className="text-xs space-y-1">{errorMessages.split("\n").map((msg, i) => (
+                  <div className="text-xs space-y-1">{errorMessages.split("\n").map((msg: string, i: number) => (
                     <div key={i}>{msg}</div>
                   ))}</div>
                 </div>

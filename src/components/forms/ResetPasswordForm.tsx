@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { PasswordInput } from "./PasswordInput";
 import toast from "react-hot-toast";
@@ -78,8 +79,13 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         return;
       }
 
-      // Success
+      // Success – ensure any existing session is cleared before redirecting
       toast.success("تم إعادة تعيين كلمة المرور بنجاح");
+      try {
+        await signOut({ redirect: false });
+      } catch (err) {
+        console.warn("Reset password: failed to sign out existing session", err);
+      }
       router.push("/admin/login");
     } catch (error) {
       console.error("Reset password error:", error);

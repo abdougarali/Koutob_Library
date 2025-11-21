@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { CustomSelect } from "@/components/shared/CustomSelect";
 
 type DeliveryPartner = {
@@ -24,6 +24,8 @@ export function CheckoutForm({
   selectedPartnerId = "",
   onPartnerChange,
 }: CheckoutFormProps) {
+  const [subscribeNewsletter, setSubscribeNewsletter] = useState(false);
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -34,6 +36,14 @@ export function CheckoutForm({
       hiddenInput.name = 'deliveryPartner';
       hiddenInput.value = selectedPartnerId;
       form.appendChild(hiddenInput);
+    }
+    // Add newsletter subscription flag
+    if (subscribeNewsletter) {
+      const newsletterInput = document.createElement('input');
+      newsletterInput.type = 'hidden';
+      newsletterInput.name = 'subscribeNewsletter';
+      newsletterInput.value = 'true';
+      form.appendChild(newsletterInput);
     }
     onSubmit?.(new FormData(form));
   };
@@ -143,6 +153,21 @@ export function CheckoutForm({
           className="min-h-[60px] rounded-xl border border-[rgba(10,110,92,0.2)] bg-[color:var(--color-surface-muted)] px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--color-primary)] sm:rounded-2xl sm:px-4 sm:py-3"
           placeholder="أي تفاصيل إضافية تساعد فريق التوصيل"
         />
+      </div>
+      <div className="flex items-start gap-2">
+        <input
+          type="checkbox"
+          id="subscribeNewsletter"
+          checked={subscribeNewsletter}
+          onChange={(e) => setSubscribeNewsletter(e.target.checked)}
+          className="mt-1 h-4 w-4 rounded border-gray-300 text-[color:var(--color-primary)] focus:ring-[color:var(--color-primary)]"
+        />
+        <label
+          htmlFor="subscribeNewsletter"
+          className="text-sm text-[color:var(--color-foreground-muted)]"
+        >
+          أرغب في الاشتراك في النشرة الإخبارية للحصول على آخر الأخبار والعروض الخاصة
+        </label>
       </div>
       <button
         type="submit"

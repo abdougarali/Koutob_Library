@@ -4,6 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { getAllOrders, createOrder } from "@/lib/services/orderService";
 import { orderInputSchema } from "@/lib/validators/orderValidator";
 import { sendOrderConfirmationEmail } from "@/lib/services/emailService";
+import { dbConnect } from "@/lib/dbConnect";
+import { NewsletterSubscriberModel } from "@/lib/models/NewsletterSubscriber";
 
 export async function GET(request: NextRequest) {
   try {
@@ -38,6 +40,39 @@ export async function POST(request: NextRequest) {
       orderCode: order.orderCode?.toString() || "",
       _id: order._id?.toString() || "",
     };
+
+    // Subscribe to newsletter if opted in during checkout
+    const subscribeNewsletter = (body as any).subscribeNewsletter === true || (body as any).subscribeNewsletter === "true";
+    if (subscribeNewsletter && validated.email) {
+      try {
+        await dbConnect();
+        const existingSubscriber = await NewsletterSubscriberModel.findOne({
+          email: validated.email.toLowerCase().trim(),
+        });
+
+        if (!existingSubscriber) {
+          await NewsletterSubscriberModel.create({
+            email: validated.email.toLowerCase().trim(),
+            name: validated.customerName,
+            source: "checkout",
+            isActive: true,
+            locale: "ar",
+          });
+        } else if (!existingSubscriber.isActive) {
+          // Reactivate if previously unsubscribed
+          existingSubscriber.isActive = true;
+          existingSubscriber.source = "checkout";
+          existingSubscriber.subscribedAt = new Date();
+          if (!existingSubscriber.name) {
+            existingSubscriber.name = validated.customerName;
+          }
+          await existingSubscriber.save();
+        }
+      } catch (newsletterError: any) {
+        // Log but don't fail order creation if newsletter subscription fails
+        console.error("[Order API] Failed to subscribe to newsletter:", newsletterError);
+      }
+    }
 
     // Send confirmation email if email is provided
     if (validated.email) {

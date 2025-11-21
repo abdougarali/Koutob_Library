@@ -30,6 +30,15 @@ const NewsletterSubscriberSchema = new Schema(
       promotions: { type: Boolean, default: true },
       newsletters: { type: Boolean, default: true },
     },
+    // Marketing fields (Phase A)
+    source: {
+      type: String,
+      enum: ["footer", "signup", "checkout"],
+      default: "footer",
+    },
+    interests: [{ type: String, trim: true, maxlength: 50 }],
+    locale: { type: String, default: "ar", maxlength: 10 },
+    tags: [{ type: String, trim: true, maxlength: 50 }],
   },
   {
     timestamps: true,
@@ -47,6 +56,9 @@ NewsletterSubscriberSchema.pre("save", function (next) {
 NewsletterSubscriberSchema.index({ email: 1 });
 NewsletterSubscriberSchema.index({ isActive: 1 });
 NewsletterSubscriberSchema.index({ unsubscribeToken: 1 });
+NewsletterSubscriberSchema.index({ source: 1 });
+NewsletterSubscriberSchema.index({ subscribedAt: -1 });
+NewsletterSubscriberSchema.index({ createdAt: -1 });
 
 export type NewsletterSubscriberDocument = InferSchemaType<
   typeof NewsletterSubscriberSchema
@@ -58,6 +70,16 @@ export const NewsletterSubscriberModel =
     "NewsletterSubscriber",
     NewsletterSubscriberSchema,
   );
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -19,6 +19,7 @@ const PendingUserSchema = new Schema(
     phone: { type: String, trim: true },
     address: { type: String, trim: true },
     city: { type: String, trim: true },
+    subscribeNewsletter: { type: Boolean, default: false },
     // Verification token
     emailVerificationToken: { type: String, required: true },
     emailVerificationTokenExpires: { type: Date, required: true },
@@ -38,6 +39,16 @@ export type PendingUserDocument = InferSchemaType<typeof PendingUserSchema>;
 export const PendingUserModel =
   (models.PendingUser as Model<PendingUserDocument>) ||
   model<PendingUserDocument>("PendingUser", PendingUserSchema);
+
+
+
+
+
+
+
+
+
+
 
 
 

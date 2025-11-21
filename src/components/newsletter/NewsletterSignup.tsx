@@ -44,6 +44,8 @@ export function NewsletterSignup({
         body: JSON.stringify({
           email: email.trim().toLowerCase(),
           ...(showName && name.trim() && { name: name.trim() }),
+          source: "footer",
+          locale: "ar",
         }),
       });
 
@@ -130,6 +132,16 @@ export function NewsletterSignup({
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

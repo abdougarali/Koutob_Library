@@ -16,6 +16,7 @@ const signupSchema = z.object({
   phone: z.string().regex(/^[0-9]{8}$/, "رقم الهاتف يجب أن يكون 8 أرقام").optional().or(z.literal("")),
   address: z.string().max(240).optional().or(z.literal("")),
   city: z.string().max(90).optional().or(z.literal("")),
+  subscribeNewsletter: z.boolean().optional().default(false),
 });
 
 export async function POST(request: NextRequest) {
@@ -90,6 +91,11 @@ export async function POST(request: NextRequest) {
 
     if (validated.city && validated.city.trim().length > 0) {
       pendingUserData.city = validated.city.trim();
+    }
+
+    // Store newsletter subscription preference
+    if (validated.subscribeNewsletter) {
+      pendingUserData.subscribeNewsletter = true;
     }
 
     // Save to PendingUser collection (temporary storage)

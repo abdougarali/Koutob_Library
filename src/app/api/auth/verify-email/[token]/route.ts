@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/lib/dbConnect";
 import { UserModel } from "@/lib/models/User";
 import { PendingUserModel } from "@/lib/models/PendingUser";
+import { NewsletterSubscriberModel } from "@/lib/models/NewsletterSubscriber";
 import { hashToken } from "@/lib/utils/generateToken";
 import { sendWelcomeEmail } from "@/lib/services/emailService";
 import mongoose from "mongoose";
@@ -93,6 +94,34 @@ export async function GET(
 
     // Create user in database
     const user = await UserModel.create(userData);
+
+    // Subscribe to newsletter if opted in during signup
+    if ((pendingUser as any).subscribeNewsletter) {
+      try {
+        const existingSubscriber = await NewsletterSubscriberModel.findOne({
+          email: user.email,
+        });
+
+        if (!existingSubscriber) {
+          await NewsletterSubscriberModel.create({
+            email: user.email,
+            name: user.name,
+            source: "signup",
+            isActive: true,
+            locale: "ar",
+          });
+        } else if (!existingSubscriber.isActive) {
+          // Reactivate if previously unsubscribed
+          existingSubscriber.isActive = true;
+          existingSubscriber.source = "signup";
+          existingSubscriber.subscribedAt = new Date();
+          await existingSubscriber.save();
+        }
+      } catch (newsletterError: any) {
+        // Log but don't fail user creation if newsletter subscription fails
+        console.error("Error subscribing to newsletter:", newsletterError);
+      }
+    }
 
     // Delete pending user (no longer needed)
     await PendingUserModel.deleteOne({ _id: pendingUser._id });

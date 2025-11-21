@@ -12,6 +12,7 @@ const menuItems = [
   { href: "/admin/reviews", label: "التقييمات", icon: "⭐" },
   { href: "/admin/delivery", label: "شركاء التوصيل", icon: "🚚" },
   { href: "/admin/users", label: "المستخدمون", icon: "👥" },
+  { href: "/admin/newsletter", label: "النشرة الإخبارية", icon: "📧" },
 ];
 
 export function AdminSidebar() {

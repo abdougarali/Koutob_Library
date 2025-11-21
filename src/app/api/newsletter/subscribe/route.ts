@@ -7,6 +7,10 @@ import { z } from "zod";
 const subscribeSchema = z.object({
   email: z.string().email("البريد الإلكتروني غير صحيح"),
   name: z.string().max(140).optional(),
+  source: z.enum(["footer", "signup", "checkout"]).default("footer"),
+  interests: z.array(z.string().max(50)).optional(),
+  locale: z.string().max(10).optional(),
+  tags: z.array(z.string().max(50)).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -34,6 +38,19 @@ export async function POST(request: NextRequest) {
         if (validated.name) {
           existing.name = validated.name.trim();
         }
+        // Update source and additional fields if provided
+        if (validated.source) {
+          existing.source = validated.source;
+        }
+        if (validated.interests && validated.interests.length > 0) {
+          existing.interests = validated.interests;
+        }
+        if (validated.locale) {
+          existing.locale = validated.locale;
+        }
+        if (validated.tags && validated.tags.length > 0) {
+          existing.tags = validated.tags;
+        }
         await existing.save();
 
         // Send welcome email
@@ -60,6 +77,10 @@ export async function POST(request: NextRequest) {
       email: validated.email.toLowerCase().trim(),
       name: validated.name?.trim(),
       isActive: true,
+      source: validated.source || "footer",
+      interests: validated.interests || [],
+      locale: validated.locale || "ar",
+      tags: validated.tags || [],
     });
 
     // Send welcome email

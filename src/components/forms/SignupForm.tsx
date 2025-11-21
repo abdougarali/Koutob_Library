@@ -16,6 +16,7 @@ export function SignupForm() {
     phone: "",
     address: "",
     city: "",
+    subscribeNewsletter: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -86,6 +87,7 @@ export function SignupForm() {
           phone: formData.phone || undefined,
           address: formData.address || undefined,
           city: formData.city || undefined,
+          subscribeNewsletter: formData.subscribeNewsletter,
         }),
       });
 
@@ -289,6 +291,29 @@ export function SignupForm() {
           className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm transition focus:border-[color:var(--color-primary)] focus:ring-[color:var(--color-primary)]"
           placeholder="المدينة"
         />
+      </div>
+
+      {/* Newsletter Opt-in */}
+      <div className="flex items-start gap-2">
+        <input
+          type="checkbox"
+          id="subscribeNewsletter"
+          name="subscribeNewsletter"
+          checked={formData.subscribeNewsletter}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              subscribeNewsletter: e.target.checked,
+            }))
+          }
+          className="mt-1 h-4 w-4 rounded border-gray-300 text-[color:var(--color-primary)] focus:ring-[color:var(--color-primary)]"
+        />
+        <label
+          htmlFor="subscribeNewsletter"
+          className="text-sm text-[color:var(--color-foreground-muted)]"
+        >
+          أرغب في الاشتراك في النشرة الإخبارية للحصول على آخر الأخبار والعروض الخاصة
+        </label>
       </div>
 
       {/* Submit Error */}

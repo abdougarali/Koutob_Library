@@ -157,6 +157,8 @@ export function CheckoutPageClient() {
 
     const selectedPartner = deliveryPartners.find((p) => p._id === selectedPartnerId);
     
+    const subscribeNewsletter = formData.get("subscribeNewsletter") === "true" || formData.get("subscribeNewsletter") === true;
+    
     const orderData = {
       customerName: formData.get("fullName") as string,
       phone: formData.get("phone") as string,
@@ -178,6 +180,7 @@ export function CheckoutPageClient() {
       deliveryPartner: selectedPartnerId || undefined,
       discountCode: appliedDiscount?.code,
       discountAmount: computedDiscountAmount,
+      subscribeNewsletter: subscribeNewsletter || undefined,
     };
 
     startTransition(async () => {

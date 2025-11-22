@@ -9,7 +9,7 @@ import {
 const ReviewSchema = new Schema(
   {
     book: { type: Schema.Types.ObjectId, ref: "Book", required: true },
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    user: { type: Schema.Types.ObjectId, ref: "User", required: false }, // Optional to allow anonymized reviews after user deletion
     rating: {
       type: Number,
       required: true,
@@ -37,6 +37,17 @@ export type ReviewDocument = InferSchemaType<typeof ReviewSchema>;
 export const ReviewModel =
   (models.Review as Model<ReviewDocument>) ||
   model<ReviewDocument>("Review", ReviewSchema);
+
+
+
+
+
+
+
+
+
+
+
 
 
 

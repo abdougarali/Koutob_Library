@@ -14,7 +14,7 @@ type Review = {
   user: {
     name: string;
     email: string;
-  };
+  } | null;
   rating: number;
   comment?: string;
   verifiedPurchase: boolean;
@@ -202,8 +202,15 @@ export function AdminReviewsClient() {
                     )}
                   </div>
                   <p className="mb-2 text-sm text-gray-600">
-                    من: <span className="font-medium">{review.user.name}</span> (
-                    {review.user.email})
+                    من:{" "}
+                    {review.user ? (
+                      <>
+                        <span className="font-medium">{review.user.name}</span> (
+                        {review.user.email})
+                      </>
+                    ) : (
+                      <span className="font-medium text-gray-500">مستخدم مجهول</span>
+                    )}
                   </p>
                   {review.comment && (
                     <p className="mb-2 text-sm text-gray-700">{review.comment}</p>

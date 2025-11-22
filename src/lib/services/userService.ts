@@ -136,7 +136,71 @@ export async function updateUser(userId: string, payload: UserUpdateInput) {
 
 export async function deleteUser(userId: string) {
   await dbConnect();
-  const user = await UserModel.findByIdAndDelete(userId).lean();
+  
+  // Check if user exists
+  const user = await UserModel.findById(userId).lean();
+  if (!user) {
+    return null;
+  }
+
+  // Import models for cascade deletion
+  const { WishlistModel } = await import("@/lib/models/Wishlist");
+  const { SavedAddressModel } = await import("@/lib/models/SavedAddress");
+  const { SearchLogModel } = await import("@/lib/models/SearchLog");
+  const { ReviewModel } = await import("@/lib/models/Review");
+  const { DiscountCodeModel } = await import("@/lib/models/DiscountCode");
+  const { OrderModel } = await import("@/lib/models/Order");
+  const { NewsletterSubscriberModel } = await import("@/lib/models/NewsletterSubscriber");
+
+  // 1. Delete user's wishlist items
+  await WishlistModel.deleteMany({ user: userId });
+
+  // 2. Delete user's saved addresses
+  await SavedAddressModel.deleteMany({ user: userId });
+
+  // 3. Delete user's search logs (optional - you might want to keep for analytics)
+  await SearchLogModel.deleteMany({ user: userId });
+
+  // 4. Anonymize reviews (keep reviews but remove user reference)
+  // Set user to null and keep the review for book ratings
+  await ReviewModel.updateMany(
+    { user: userId },
+    { $set: { user: null } }
+  );
+  
+  // Also nullify approvedBy if this user approved reviews
+  await ReviewModel.updateMany(
+    { approvedBy: userId },
+    { $set: { approvedBy: null } }
+  );
+
+  // 5. Remove user from discount code usage tracking
+  await DiscountCodeModel.updateMany(
+    { "usageByCustomer.userId": userId },
+    { $pull: { usageByCustomer: { userId: userId } } }
+  );
+
+  // 6. Nullify user reference in order status history (keep orders for records)
+  await OrderModel.updateMany(
+    { "statusHistory.updatedBy": userId },
+    { $set: { "statusHistory.$[elem].updatedBy": null } },
+    { arrayFilters: [{ "elem.updatedBy": userId }] }
+  );
+
+  // 7. Handle newsletter subscription (matched by email)
+  // Mark as inactive instead of deleting to respect original subscription consent
+  // User can still unsubscribe via email link if they want
+  // The subscription record remains in the database but is marked as inactive
+  if (user.email) {
+    await NewsletterSubscriberModel.updateOne(
+      { email: user.email.toLowerCase().trim() },
+      { $set: { isActive: false } }
+    );
+  }
+
+  // 8. Finally, delete the user
+  await UserModel.findByIdAndDelete(userId);
+
   return user;
 }
 

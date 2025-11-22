@@ -157,7 +157,7 @@ export function CheckoutPageClient() {
 
     const selectedPartner = deliveryPartners.find((p) => p._id === selectedPartnerId);
     
-    const subscribeNewsletter = formData.get("subscribeNewsletter") === "true" || formData.get("subscribeNewsletter") === true;
+    const subscribeNewsletter = formData.get("subscribeNewsletter") === "true";
     
     const orderData = {
       customerName: formData.get("fullName") as string,

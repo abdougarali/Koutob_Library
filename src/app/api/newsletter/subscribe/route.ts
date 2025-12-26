@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
 
           const syncResult = await syncSubscriberToESP(
             existing.email,
-            existing.name,
+            existing.name || undefined,
             existing.source,
             tags,
           );
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
 
       const syncResult = await syncSubscriberToESP(
         subscriber.email,
-        subscriber.name,
+        subscriber.name || undefined,
         subscriber.source,
         tags,
       );

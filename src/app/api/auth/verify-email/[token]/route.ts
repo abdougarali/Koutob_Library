@@ -135,7 +135,7 @@ export async function GET(
 
             const syncResult = await syncSubscriberToESP(
               subscriber.email,
-              subscriber.name,
+              subscriber.name || undefined,
               subscriber.source,
               tags,
             );

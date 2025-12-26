@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 
         const syncResult = await syncSubscriberToESP(
           subscriber.email,
-          subscriber.name,
+          subscriber.name || undefined,
           subscriber.source,
           tags,
         );

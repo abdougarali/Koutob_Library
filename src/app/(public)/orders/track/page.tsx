@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { OrderTrackClient } from "@/components/orders/OrderTrackClient";
 
 export const metadata: Metadata = {
-  title: "تتبع الطلب | مكتبة كتب الإسلامية",
+  title: "تتبع الطلب | مكتبة الفاروق",
   description:
     "تحقق من حالة طلبك وخطوات التوصيل الحالية عبر إدخال رقم الطلب أو رقم الهاتف.",
 };

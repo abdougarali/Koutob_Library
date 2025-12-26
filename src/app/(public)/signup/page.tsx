@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SignupForm } from "@/components/forms/SignupForm";
 
 export const metadata: Metadata = {
-  title: "إنشاء حساب جديد | مكتبة كتب الإسلامية",
+  title: "إنشاء حساب جديد | مكتبة الفاروق",
   description: "أنشئ حساباً جديداً للوصول إلى جميع خدماتنا",
 };
 
@@ -17,7 +17,7 @@ export default function SignupPage() {
             href="/"
             className="mb-4 inline-block text-2xl font-bold text-[color:var(--color-primary)]"
           >
-            مكتبة كتب الإسلامية
+            مكتبة الفاروق
           </Link>
           <h1 className="text-2xl font-bold text-[color:var(--color-foreground)]">
             إنشاء حساب جديد

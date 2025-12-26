@@ -15,7 +15,7 @@ export default function ResendVerificationPage() {
             href="/"
             className="mb-4 inline-block text-2xl font-bold text-[color:var(--color-primary)]"
           >
-            مكتبة كتب الإسلامية
+            مكتبة الفاروق
           </Link>
           <h1 className="text-2xl font-bold text-[color:var(--color-foreground)]">
             إعادة إرسال رابط التأكيد

@@ -109,7 +109,7 @@ export async function sendPasswordResetEmail(
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
         
         <p style="color: #999; font-size: 12px; text-align: center;">
-          مكتبة كتب الإسلامية | Koutob
+          مكتبة الفاروق | Koutob
         </p>
       </div>
     </body>
@@ -118,7 +118,7 @@ export async function sendPasswordResetEmail(
 
   return sendEmail({
     to: email,
-    subject: "إعادة تعيين كلمة المرور - مكتبة كتب الإسلامية",
+    subject: "إعادة تعيين كلمة المرور - مكتبة الفاروق",
     html,
   });
 }
@@ -148,7 +148,7 @@ export async function sendVerificationEmail(
         </p>
         
         <p style="color: #333; font-size: 16px; line-height: 1.6;">
-          شكراً لك على التسجيل في مكتبة كتب الإسلامية! يرجى النقر على الزر أدناه لتأكيد بريدك الإلكتروني:
+          شكراً لك على التسجيل في مكتبة الفاروق! يرجى النقر على الزر أدناه لتأكيد بريدك الإلكتروني:
         </p>
         
         <div style="text-align: center; margin: 30px 0;">
@@ -171,7 +171,7 @@ export async function sendVerificationEmail(
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
         
         <p style="color: #999; font-size: 12px; text-align: center;">
-          مكتبة كتب الإسلامية | Koutob
+          مكتبة الفاروق | Koutob
         </p>
       </div>
     </body>
@@ -180,7 +180,7 @@ export async function sendVerificationEmail(
 
   return sendEmail({
     to: email,
-    subject: "تأكيد البريد الإلكتروني - مكتبة كتب الإسلامية",
+    subject: "تأكيد البريد الإلكتروني - مكتبة الفاروق",
     html,
   });
 }
@@ -299,7 +299,7 @@ export async function sendOrderConfirmationEmail(
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
         
         <p style="color: #999; font-size: 12px; text-align: center;">
-          مكتبة كتب الإسلامية | Koutob
+          مكتبة الفاروق | Koutob
         </p>
       </div>
     </body>
@@ -308,7 +308,7 @@ export async function sendOrderConfirmationEmail(
 
   return sendEmail({
     to: email,
-    subject: `تأكيد الطلب #${orderData.orderCode} - مكتبة كتب الإسلامية`,
+    subject: `تأكيد الطلب #${orderData.orderCode} - مكتبة الفاروق`,
     html,
   });
 }
@@ -325,7 +325,7 @@ export async function sendWelcomeEmail(
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>مرحباً بك في مكتبة كتب الإسلامية</title>
+      <title>مرحباً بك في مكتبة الفاروق</title>
     </head>
     <body style="font-family: 'Tajawal', Arial, sans-serif; direction: rtl; background-color: #f5f5f5; padding: 20px;">
       <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -336,7 +336,7 @@ export async function sendWelcomeEmail(
         </p>
         
         <p style="color: #333; font-size: 16px; line-height: 1.6;">
-          شكراً لك على الانضمام إلى مكتبة كتب الإسلامية! نحن سعداء جداً بوجودك معنا.
+          شكراً لك على الانضمام إلى مكتبة الفاروق! نحن سعداء جداً بوجودك معنا.
         </p>
         
         <p style="color: #333; font-size: 16px; line-height: 1.6;">
@@ -363,7 +363,7 @@ export async function sendWelcomeEmail(
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
         
         <p style="color: #999; font-size: 12px; text-align: center;">
-          مكتبة كتب الإسلامية | Koutob
+          مكتبة الفاروق | Koutob
         </p>
       </div>
     </body>
@@ -372,7 +372,7 @@ export async function sendWelcomeEmail(
 
   return sendEmail({
     to: email,
-    subject: "مرحباً بك في مكتبة كتب الإسلامية!",
+    subject: "مرحباً بك في مكتبة الفاروق!",
     html,
   });
 }
@@ -466,7 +466,7 @@ export async function sendOrderStatusUpdateEmail(
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
         
         <p style="color: #999; font-size: 12px; text-align: center;">
-          مكتبة كتب الإسلامية | Koutob
+          مكتبة الفاروق | Koutob
         </p>
       </div>
     </body>
@@ -475,7 +475,7 @@ export async function sendOrderStatusUpdateEmail(
 
   return sendEmail({
     to: email,
-    subject: `تحديث حالة الطلب #${orderData.orderCode} - مكتبة كتب الإسلامية`,
+    subject: `تحديث حالة الطلب #${orderData.orderCode} - مكتبة الفاروق`,
     html,
   });
 }

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ForgotPasswordForm } from "@/components/forms/ForgotPasswordForm";
 
 export const metadata: Metadata = {
-  title: "نسيت كلمة المرور | مكتبة كتب الإسلامية",
+  title: "نسيت كلمة المرور | مكتبة الفاروق",
   description: "إعادة تعيين كلمة المرور",
 };
 
@@ -17,7 +17,7 @@ export default function ForgotPasswordPage() {
             href="/"
             className="mb-4 inline-block text-2xl font-bold text-[color:var(--color-primary)]"
           >
-            مكتبة كتب الإسلامية
+            مكتبة الفاروق
           </Link>
           <h1 className="text-2xl font-bold text-[color:var(--color-foreground)]">
             نسيت كلمة المرور؟

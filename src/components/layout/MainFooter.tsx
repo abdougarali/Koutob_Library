@@ -8,7 +8,7 @@ export function MainFooter() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-4">
             <h3 className="text-lg font-semibold text-[color:var(--color-foreground)]">
-              مكتبة كتب
+              مكتبة الفاروق
             </h3>
             <p className="text-sm text-[color:var(--color-foreground-muted)]">
               متجر إلكتروني متخصص في الكتب الإسلامية مع خدمة التوصيل المحلي
@@ -61,7 +61,7 @@ export function MainFooter() {
           </div>
         </div>
         <div className="mt-8 border-t border-[rgba(184,138,68,0.12)] pt-6 text-center text-sm text-[color:var(--color-foreground-muted)]">
-          <p>© {new Date().getFullYear()} مكتبة كتب. جميع الحقوق محفوظة.</p>
+          <p>© {new Date().getFullYear()} مكتبة الفاروق. جميع الحقوق محفوظة.</p>
         </div>
       </div>
     </footer>

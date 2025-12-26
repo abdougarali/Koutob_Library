@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { CheckoutPageClient } from "@/components/checkout/CheckoutPageClient";
 
 export const metadata: Metadata = {
-  title: "إتمام الطلب | مكتبة كتب الإسلامية",
+  title: "إتمام الطلب | مكتبة الفاروق",
   description:
     "أكمل بياناتك الشخصية وعنوان التوصيل لتأكيد الطلب والدفع نقداً عند الاستلام.",
 };

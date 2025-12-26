@@ -5,6 +5,7 @@ import { PendingUserModel } from "@/lib/models/PendingUser";
 import { NewsletterSubscriberModel } from "@/lib/models/NewsletterSubscriber";
 import { hashToken } from "@/lib/utils/generateToken";
 import { sendWelcomeEmail } from "@/lib/services/emailService";
+import { syncSubscriberToESP } from "@/lib/services/espService";
 import mongoose from "mongoose";
 
 export async function GET(
@@ -102,13 +103,15 @@ export async function GET(
           email: user.email,
         });
 
+        let subscriber;
         if (!existingSubscriber) {
-          await NewsletterSubscriberModel.create({
+          subscriber = await NewsletterSubscriberModel.create({
             email: user.email,
             name: user.name,
             source: "signup",
             isActive: true,
             locale: "ar",
+            espStatus: "pending",
           });
         } else if (!existingSubscriber.isActive) {
           // Reactivate if previously unsubscribed
@@ -116,6 +119,43 @@ export async function GET(
           existingSubscriber.source = "signup";
           existingSubscriber.subscribedAt = new Date();
           await existingSubscriber.save();
+          subscriber = existingSubscriber;
+        } else {
+          subscriber = existingSubscriber;
+        }
+
+        // Sync to ESP (Brevo) if subscriber exists
+        if (subscriber) {
+          try {
+            const tags = [
+              subscriber.source,
+              subscriber.locale || "ar",
+              ...(subscriber.interests || []),
+            ];
+
+            const syncResult = await syncSubscriberToESP(
+              subscriber.email,
+              subscriber.name,
+              subscriber.source,
+              tags,
+            );
+
+            if (syncResult.success) {
+              subscriber.espStatus = "synced";
+              subscriber.espContactId = syncResult.espContactId;
+              subscriber.espLastSyncedAt = new Date();
+              subscriber.espSyncError = undefined;
+            } else {
+              subscriber.espStatus = "error";
+              subscriber.espSyncError = syncResult.error;
+            }
+            await subscriber.save();
+          } catch (syncError) {
+            console.error("[Email Verification] ESP sync failed:", syncError);
+            subscriber.espStatus = "error";
+            subscriber.espSyncError = String(syncError);
+            await subscriber.save();
+          }
         }
       } catch (newsletterError: any) {
         // Log but don't fail user creation if newsletter subscription fails

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/lib/dbConnect";
 import { NewsletterSubscriberModel } from "@/lib/models/NewsletterSubscriber";
 import { sendEmail } from "@/lib/services/emailService";
+import { syncSubscriberToESP } from "@/lib/services/espService";
 import { z } from "zod";
 
 const subscribeSchema = z.object({
@@ -53,6 +54,39 @@ export async function POST(request: NextRequest) {
         }
         await existing.save();
 
+        // Sync to ESP (Brevo)
+        try {
+          const tags = [
+            existing.source,
+            existing.locale || "ar",
+            ...(existing.interests || []),
+          ];
+
+          const syncResult = await syncSubscriberToESP(
+            existing.email,
+            existing.name,
+            existing.source,
+            tags,
+          );
+
+          if (syncResult.success) {
+            existing.espStatus = "synced";
+            existing.espContactId = syncResult.espContactId;
+            existing.espLastSyncedAt = new Date();
+            existing.espSyncError = undefined;
+          } else {
+            existing.espStatus = "error";
+            existing.espSyncError = syncResult.error;
+          }
+          await existing.save();
+        } catch (syncError) {
+          // Don't fail subscription if ESP sync fails
+          console.error("[Newsletter] ESP sync failed:", syncError);
+          existing.espStatus = "error";
+          existing.espSyncError = String(syncError);
+          await existing.save();
+        }
+
         // Send welcome email
         await sendEmail({
           to: existing.email,
@@ -81,14 +115,48 @@ export async function POST(request: NextRequest) {
       interests: validated.interests || [],
       locale: validated.locale || "ar",
       tags: validated.tags || [],
+      espStatus: "pending", // Will be updated after sync
     });
+
+    // Sync to ESP (Brevo)
+    try {
+      const tags = [
+        subscriber.source,
+        subscriber.locale || "ar",
+        ...(subscriber.interests || []),
+      ];
+
+      const syncResult = await syncSubscriberToESP(
+        subscriber.email,
+        subscriber.name,
+        subscriber.source,
+        tags,
+      );
+
+      if (syncResult.success) {
+        subscriber.espStatus = "synced";
+        subscriber.espContactId = syncResult.espContactId;
+        subscriber.espLastSyncedAt = new Date();
+        subscriber.espSyncError = undefined;
+      } else {
+        subscriber.espStatus = "error";
+        subscriber.espSyncError = syncResult.error;
+      }
+      await subscriber.save();
+    } catch (syncError) {
+      // Don't fail subscription if ESP sync fails
+      console.error("[Newsletter] ESP sync failed:", syncError);
+      subscriber.espStatus = "error";
+      subscriber.espSyncError = String(syncError);
+      await subscriber.save();
+    }
 
     // Send welcome email
     await sendEmail({
       to: subscriber.email,
       subject: "مرحباً بك في نشرتنا الإخبارية",
       html: `
-        <h1>مرحباً بك في مكتبة كتب الإسلامية!</h1>
+        <h1>مرحباً بك في مكتبة الفاروق!</h1>
         <p>شكراً لاشتراكك في نشرتنا الإخبارية.</p>
         <p>ستتلقى آخر الأخبار عن:</p>
         <ul>

@@ -149,7 +149,7 @@ export async function sendPasswordResetEmailSMTP(
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
         
         <p style="color: #999; font-size: 12px; text-align: center;">
-          مكتبة كتب الإسلامية | Koutob
+          مكتبة الفاروق | Koutob
         </p>
       </div>
     </body>
@@ -158,7 +158,7 @@ export async function sendPasswordResetEmailSMTP(
 
   return sendEmailSMTP({
     to: email,
-    subject: "إعادة تعيين كلمة المرور - مكتبة كتب الإسلامية",
+    subject: "إعادة تعيين كلمة المرور - مكتبة الفاروق",
     html,
   });
 }
@@ -187,7 +187,7 @@ export async function sendVerificationEmailSMTP(
         </p>
         
         <p style="color: #333; font-size: 16px; line-height: 1.6;">
-          شكراً لك على التسجيل في مكتبة كتب الإسلامية! يرجى النقر على الزر أدناه لتأكيد بريدك الإلكتروني:
+          شكراً لك على التسجيل في مكتبة الفاروق! يرجى النقر على الزر أدناه لتأكيد بريدك الإلكتروني:
         </p>
         
         <div style="text-align: center; margin: 30px 0;">
@@ -210,7 +210,7 @@ export async function sendVerificationEmailSMTP(
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
         
         <p style="color: #999; font-size: 12px; text-align: center;">
-          مكتبة كتب الإسلامية | Koutob
+          مكتبة الفاروق | Koutob
         </p>
       </div>
     </body>
@@ -219,7 +219,7 @@ export async function sendVerificationEmailSMTP(
 
   return sendEmailSMTP({
     to: email,
-    subject: "تأكيد البريد الإلكتروني - مكتبة كتب الإسلامية",
+    subject: "تأكيد البريد الإلكتروني - مكتبة الفاروق",
     html,
   });
 }
@@ -274,7 +274,7 @@ export async function sendContactMessageEmail(
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
         
         <p style="color: #999; font-size: 12px; text-align: center;">
-          مكتبة كتب الإسلامية | Koutob
+          مكتبة الفاروق | Koutob
         </p>
       </div>
     </body>

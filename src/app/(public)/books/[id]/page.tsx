@@ -53,8 +53,8 @@ export async function generateMetadata({ params }: BookPageProps): Promise<Metad
   const book = await loadBook(decodedId);
 
   const title = book
-    ? `${book.title} | مكتبة كتب الإسلامية`
-    : "الكتاب غير موجود | مكتبة كتب الإسلامية";
+    ? `${book.title} | مكتبة الفاروق`
+    : "الكتاب غير موجود | مكتبة الفاروق";
   const description = book
     ? `تفاصيل الكتاب "${book.title}" من تأليف ${book.author}.`
     : "الكتاب المطلوب غير متوفر حالياً.";

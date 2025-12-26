@@ -26,7 +26,9 @@ export async function GET(request: NextRequest) {
       .sort({ subscribedAt: -1 })
       .limit(1000)
       .lean()
-      .select("email name source isActive subscribedAt interests locale tags");
+      .select(
+        "email name source isActive subscribedAt interests locale tags espStatus espLastSyncedAt espSyncError",
+      );
 
     return NextResponse.json(subscribers);
   } catch (error: any) {
@@ -37,4 +39,5 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
 

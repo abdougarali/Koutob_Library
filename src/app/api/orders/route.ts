@@ -6,6 +6,7 @@ import { orderInputSchema } from "@/lib/validators/orderValidator";
 import { sendOrderConfirmationEmail } from "@/lib/services/emailService";
 import { dbConnect } from "@/lib/dbConnect";
 import { NewsletterSubscriberModel } from "@/lib/models/NewsletterSubscriber";
+import { syncSubscriberToESP } from "@/lib/services/espService";
 
 export async function GET(request: NextRequest) {
   try {
@@ -50,13 +51,15 @@ export async function POST(request: NextRequest) {
           email: validated.email.toLowerCase().trim(),
         });
 
+        let subscriber;
         if (!existingSubscriber) {
-          await NewsletterSubscriberModel.create({
+          subscriber = await NewsletterSubscriberModel.create({
             email: validated.email.toLowerCase().trim(),
             name: validated.customerName,
             source: "checkout",
             isActive: true,
             locale: "ar",
+            espStatus: "pending",
           });
         } else if (!existingSubscriber.isActive) {
           // Reactivate if previously unsubscribed
@@ -67,6 +70,43 @@ export async function POST(request: NextRequest) {
             existingSubscriber.name = validated.customerName;
           }
           await existingSubscriber.save();
+          subscriber = existingSubscriber;
+        } else {
+          subscriber = existingSubscriber;
+        }
+
+        // Sync to ESP (Brevo) if subscriber exists
+        if (subscriber) {
+          try {
+            const tags = [
+              subscriber.source,
+              subscriber.locale || "ar",
+              ...(subscriber.interests || []),
+            ];
+
+            const syncResult = await syncSubscriberToESP(
+              subscriber.email,
+              subscriber.name,
+              subscriber.source,
+              tags,
+            );
+
+            if (syncResult.success) {
+              subscriber.espStatus = "synced";
+              subscriber.espContactId = syncResult.espContactId;
+              subscriber.espLastSyncedAt = new Date();
+              subscriber.espSyncError = undefined;
+            } else {
+              subscriber.espStatus = "error";
+              subscriber.espSyncError = syncResult.error;
+            }
+            await subscriber.save();
+          } catch (syncError) {
+            console.error("[Order API] ESP sync failed:", syncError);
+            subscriber.espStatus = "error";
+            subscriber.espSyncError = String(syncError);
+            await subscriber.save();
+          }
         }
       } catch (newsletterError: any) {
         // Log but don't fail order creation if newsletter subscription fails

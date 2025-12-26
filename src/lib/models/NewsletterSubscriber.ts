@@ -39,6 +39,15 @@ const NewsletterSubscriberSchema = new Schema(
     interests: [{ type: String, trim: true, maxlength: 50 }],
     locale: { type: String, default: "ar", maxlength: 10 },
     tags: [{ type: String, trim: true, maxlength: 50 }],
+    // ESP Sync fields (Phase B)
+    espStatus: {
+      type: String,
+      enum: ["synced", "pending", "error"],
+      default: "pending",
+    },
+    espContactId: { type: String }, // Brevo contact ID
+    espLastSyncedAt: { type: Date },
+    espSyncError: { type: String }, // Store error message if sync fails
   },
   {
     timestamps: true,
@@ -59,6 +68,7 @@ NewsletterSubscriberSchema.index({ unsubscribeToken: 1 });
 NewsletterSubscriberSchema.index({ source: 1 });
 NewsletterSubscriberSchema.index({ subscribedAt: -1 });
 NewsletterSubscriberSchema.index({ createdAt: -1 });
+NewsletterSubscriberSchema.index({ espStatus: 1 }); // For sync queries
 
 export type NewsletterSubscriberDocument = InferSchemaType<
   typeof NewsletterSubscriberSchema

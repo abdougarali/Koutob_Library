@@ -16,7 +16,7 @@ import { bookCategories as fallbackCategories } from "@/data/categories";
 import { featuredBooks as fallbackBooks } from "@/data/featured-books";
 
 export const metadata: Metadata = {
-  title: "جميع الكتب | مكتبة كتب الإسلامية",
+  title: "جميع الكتب | مكتبة الفاروق",
   description:
     "تصفّح مجموعتنا المختارة من الكتب الإسلامية التي تغطي الفقه، الحديث، التفسير، السيرة، والعقيدة.",
 };
@@ -128,7 +128,7 @@ export default async function BooksPage({ searchParams }: BooksPageProps) {
           جميع الكتب
         </p>
         <h1 className="text-2xl font-bold text-[color:var(--color-foreground)] sm:text-3xl">
-          اكتشف مكتبة كتب المختارة بعناية
+          اكتشف مجموعة الكتب المختارة بعناية
         </h1>
         <p className="text-sm text-[color:var(--color-foreground-muted)] sm:text-base">
           نوفر لك كتباً موثوقة في مختلف العلوم الإسلامية مع تحديث دائم للمخزون

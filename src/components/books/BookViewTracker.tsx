@@ -42,3 +42,14 @@ export function BookViewTracker({ book }: BookViewTrackerProps) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+

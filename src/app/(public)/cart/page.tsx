@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { CartView } from "@/components/cart/CartView";
 
 export const metadata: Metadata = {
-  title: "سلة المشتريات | مكتبة كتب الإسلامية",
+  title: "سلة المشتريات | مكتبة الفاروق",
   description: "راجع مشترياتك وأكمل عملية الشراء.",
 };
 

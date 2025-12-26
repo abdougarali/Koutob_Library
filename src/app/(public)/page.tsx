@@ -12,7 +12,7 @@ import { featuredBooks as fallbackBooks } from "@/data/featured-books";
 import { bookCategories as fallbackCategories } from "@/data/categories";
 
 export const metadata: Metadata = {
-  title: "مكتبة كتب الإسلامية | Koutob",
+  title: "مكتبة الفاروق | Koutob",
   description:
     "متجر إلكتروني متخصص في الكتب الإسلامية مع خدمة التوصيل المحلي والدفع عند الاستلام.",
 };
@@ -50,7 +50,7 @@ export default async function HomePage() {
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-6 px-4 text-center sm:gap-8 sm:px-6 lg:flex-row lg:text-right">
           <div className="flex-1 w-full">
             <h1 className="mb-3 text-3xl font-bold text-[color:var(--color-foreground)] sm:text-4xl sm:mb-4 md:text-5xl lg:text-6xl">
-              مكتبة كتب الإسلامية
+              مكتبة الفاروق
             </h1>
             <p className="mb-4 text-base text-[color:var(--color-foreground-muted)] sm:mb-6 sm:text-lg">
               اكتشف مجموعتنا المختارة من الكتب الإسلامية الموثوقة في مختلف

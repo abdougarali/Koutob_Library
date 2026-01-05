@@ -2,6 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import {
+  ExclamationTriangleIcon,
+  ArrowPathIcon,
+  BookOpenIcon,
+} from "@heroicons/react/24/outline";
 
 type LowStockBook = {
   _id: string;
@@ -50,89 +55,127 @@ export function LowStockAlert() {
 
   if (loading) {
     return (
-      <div className="rounded-2xl border border-orange-200 bg-orange-50 p-4">
-        <div className="text-sm text-orange-700">جاري التحميل...</div>
+      <div className="rounded-xl border border-orange-200 bg-white p-4 shadow-sm">
+        <div className="flex items-center gap-2">
+          <ExclamationTriangleIcon className="h-4 w-4 animate-pulse text-orange-500" />
+          <span className="text-xs font-medium text-gray-600">جاري التحميل...</span>
+        </div>
       </div>
     );
   }
 
+  const outOfStockCount = books.filter((b) => b.stock === 0).length;
+  const lowStockCount = books.length - outOfStockCount;
+
   return (
-    <div className="rounded-2xl border border-orange-200 bg-orange-50 p-4 shadow-sm sm:p-6">
-      <div className="mb-4 flex items-center justify-between gap-3">
+    <div className="rounded-xl border border-orange-200 bg-white p-4 shadow-sm">
+      {/* Compact Header */}
+      <div className="mb-3 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-2xl">⚠️</span>
-          <div>
-            <h3 className="text-lg font-semibold text-orange-900">
-              تنبيهات المخزون
-            </h3>
-            {refreshing && (
-              <p className="text-xs text-orange-700">جارٍ تحديث القائمة...</p>
-            )}
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50">
+            <ExclamationTriangleIcon className="h-4 w-4 text-orange-600" />
           </div>
+          <h3 className="text-sm font-bold text-gray-900">تنبيهات المخزون</h3>
+          {books.length > 0 && (
+            <span className="rounded-full bg-orange-600 px-2 py-0.5 text-xs font-bold text-white">
+              {books.length}
+            </span>
+          )}
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => fetchLowStockBooks(false)}
-            disabled={refreshing}
-            className="rounded-lg border border-orange-200 bg-white px-3 py-1.5 text-xs font-semibold text-orange-900 transition hover:bg-orange-100 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            إعادة تحميل
-          </button>
-          <span className="rounded-full bg-orange-200 px-3 py-1 text-sm font-bold text-orange-900">
-            {books.length}
-          </span>
-        </div>
+        <button
+          type="button"
+          onClick={() => fetchLowStockBooks(false)}
+          disabled={refreshing}
+          className="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
+          title="تحديث"
+        >
+          <ArrowPathIcon
+            className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`}
+          />
+        </button>
       </div>
+
+      {/* Compact Stats Bar */}
+      {books.length > 0 && (
+        <div className="mb-3 flex items-center gap-2 border-b border-gray-100 pb-2">
+          {outOfStockCount > 0 && (
+            <span className="flex items-center gap-1 text-xs font-medium text-red-600">
+              <span className="h-1.5 w-1.5 rounded-full bg-red-600"></span>
+              {outOfStockCount} نفد
+            </span>
+          )}
+          {lowStockCount > 0 && (
+            <span className="flex items-center gap-1 text-xs font-medium text-orange-600">
+              <span className="h-1.5 w-1.5 rounded-full bg-orange-600"></span>
+              {lowStockCount} منخفض
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Content */}
       {books.length === 0 ? (
-        <p className="text-sm font-medium text-orange-800">
-          لا توجد كتب بحاجة إلى إعادة تخزين حالياً.
-        </p>
-      ) : (
-        <>
-          <p className="mb-4 text-sm text-orange-800">
-            الكتب التالية تحتاج إلى إعادة تخزين:
+        <div className="flex items-center gap-2 rounded-lg bg-green-50 p-3">
+          <BookOpenIcon className="h-4 w-4 text-green-600" />
+          <p className="text-xs font-medium text-green-700">
+            لا توجد تنبيهات مخزون
           </p>
-          <div className="space-y-2 max-h-64 overflow-y-auto">
-            {books.slice(0, 10).map((book) => (
-              <div
-                key={book._id}
-                className="flex items-center justify-between rounded-lg border border-orange-200 bg-white p-3"
-              >
+        </div>
+      ) : (
+        <div className="space-y-1.5 max-h-72 overflow-y-auto">
+          {books.slice(0, 8).map((book) => (
+            <Link
+              key={book._id}
+              href={`/admin/books?edit=${book.slug}`}
+              className="group flex items-center justify-between gap-2 rounded-lg border border-gray-200 bg-gray-50 p-2.5 transition hover:border-orange-300 hover:bg-orange-50"
+            >
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <div
+                  className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded ${
+                    book.stock === 0 ? "bg-red-100" : "bg-orange-100"
+                  }`}
+                >
+                  <BookOpenIcon
+                    className={`h-3.5 w-3.5 ${
+                      book.stock === 0 ? "text-red-600" : "text-orange-600"
+                    }`}
+                  />
+                </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[color:var(--color-foreground)] truncate">
+                  <p className="text-xs font-semibold text-gray-900 truncate">
                     {book.title}
                   </p>
-                  {book.stock === 0 ? (
-                    <p className="text-xs font-semibold text-red-600">
-                      نفد المخزون بالكامل — أعد التخزين فوراً
-                    </p>
-                  ) : (
-                    <p className="text-xs text-orange-700">
-                      متبقي {book.stock} من {book.lowStockThreshold}
-                    </p>
-                  )}
+                  <div className="mt-0.5 flex items-center gap-1.5">
+                    {book.stock === 0 ? (
+                      <span className="flex items-center gap-1 text-[10px] font-bold text-red-600">
+                        <ExclamationTriangleIcon className="h-3 w-3" />
+                        نفد
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-medium text-gray-600">
+                        متبقي <span className="font-bold text-orange-600">{book.stock}</span>
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <Link
-                  href={`/admin/books?edit=${book.slug}`}
-                  className="ml-3 rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-orange-700 whitespace-nowrap"
-                >
-                  تحديث
-                </Link>
               </div>
-            ))}
-          </div>
-          {books.length > 10 && (
-            <div className="mt-4 text-center">
-              <Link
-                href="/admin/books?filter=low-stock"
-                className="text-sm font-semibold text-orange-900 hover:underline"
-              >
-                عرض جميع الكتب ({books.length})
-              </Link>
-            </div>
+              <span className="text-[10px] font-medium text-gray-400 group-hover:text-orange-600">
+                →
+              </span>
+            </Link>
+          ))}
+          {books.length > 8 && (
+            <Link
+              href="/admin/books?filter=low-stock"
+              className="flex items-center justify-center gap-1 rounded-lg border border-dashed border-gray-300 bg-gray-50 p-2 text-xs font-medium text-gray-600 transition hover:border-orange-300 hover:bg-orange-50 hover:text-orange-700"
+            >
+              <span>عرض جميع الكتب</span>
+              <span className="rounded-full bg-gray-200 px-1.5 py-0.5 text-[10px] font-bold">
+                {books.length}
+              </span>
+            </Link>
           )}
-        </>
+        </div>
       )}
     </div>
   );

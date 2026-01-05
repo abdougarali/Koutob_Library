@@ -3,16 +3,26 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  ChartBarIcon,
+  BookOpenIcon,
+  CubeIcon,
+  TicketIcon,
+  StarIcon,
+  TruckIcon,
+  UsersIcon,
+  EnvelopeIcon,
+} from "@heroicons/react/24/outline";
 
 const menuItems = [
-  { href: "/admin", label: "لوحة التحكم", icon: "📊" },
-  { href: "/admin/books", label: "الكتب", icon: "📚" },
-  { href: "/admin/orders", label: "الطلبات", icon: "📦" },
-  { href: "/admin/discounts", label: "رموز الخصم", icon: "🎟️" },
-  { href: "/admin/reviews", label: "التقييمات", icon: "⭐" },
-  { href: "/admin/delivery", label: "شركاء التوصيل", icon: "🚚" },
-  { href: "/admin/users", label: "المستخدمون", icon: "👥" },
-  { href: "/admin/newsletter", label: "النشرة الإخبارية", icon: "📧" },
+  { href: "/admin", label: "لوحة التحكم", icon: ChartBarIcon },
+  { href: "/admin/books", label: "الكتب", icon: BookOpenIcon },
+  { href: "/admin/orders", label: "الطلبات", icon: CubeIcon },
+  { href: "/admin/discounts", label: "رموز الخصم", icon: TicketIcon },
+  { href: "/admin/reviews", label: "التقييمات", icon: StarIcon },
+  { href: "/admin/delivery", label: "شركاء التوصيل", icon: TruckIcon },
+  { href: "/admin/users", label: "المستخدمون", icon: UsersIcon },
+  { href: "/admin/newsletter", label: "النشرة الإخبارية", icon: EnvelopeIcon },
 ];
 
 export function AdminSidebar() {
@@ -52,6 +62,7 @@ export function AdminSidebar() {
         <nav className="flex flex-col gap-2">
           {menuItems.map((item) => {
             const isActive = pathname === item.href;
+            const Icon = item.icon;
             return (
               <Link
                 key={item.href}
@@ -63,7 +74,7 @@ export function AdminSidebar() {
                     : "text-[color:var(--color-foreground-muted)] hover:bg-gray-100"
                 }`}
               >
-                <span className="text-base sm:text-lg">{item.icon}</span>
+                <Icon className="h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0" />
                 <span>{item.label}</span>
               </Link>
             );

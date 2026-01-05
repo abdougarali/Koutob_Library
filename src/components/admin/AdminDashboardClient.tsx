@@ -4,6 +4,20 @@ import { useEffect, useState } from "react";
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import { LowStockAlert } from "./LowStockAlert";
 import Link from "next/link";
+import {
+  BanknotesIcon,
+  CalendarDaysIcon,
+  ChartBarIcon,
+  ArrowTrendingUpIcon,
+  CubeIcon,
+  BoltIcon,
+  UsersIcon,
+  StarIcon,
+  BookOpenIcon,
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 
 type AnalyticsData = {
   sales: {
@@ -224,25 +238,33 @@ export function AdminDashboardClient() {
         <StatCard
           title="إجمالي الإيرادات"
           value={formatCurrency(analytics.sales.totalRevenue)}
-          icon="💰"
+          icon={BanknotesIcon}
+          iconColor="text-emerald-600"
+          iconBgColor="bg-emerald-50"
           trend={null}
         />
         <StatCard
           title="إيرادات اليوم"
           value={formatCurrency(analytics.sales.todayRevenue)}
-          icon="📅"
+          icon={CalendarDaysIcon}
+          iconColor="text-blue-600"
+          iconBgColor="bg-blue-50"
           trend={null}
         />
         <StatCard
           title="إيرادات هذا الأسبوع"
           value={formatCurrency(analytics.sales.thisWeekRevenue)}
-          icon="📊"
+          icon={ChartBarIcon}
+          iconColor="text-purple-600"
+          iconBgColor="bg-purple-50"
           trend={null}
         />
         <StatCard
           title="متوسط قيمة الطلب"
           value={formatCurrency(analytics.sales.averageOrderValue)}
-          icon="📈"
+          icon={ArrowTrendingUpIcon}
+          iconColor="text-indigo-600"
+          iconBgColor="bg-indigo-50"
           trend={null}
         />
       </div>
@@ -252,25 +274,33 @@ export function AdminDashboardClient() {
         <StatCard
           title="إجمالي الطلبات"
           value={analytics.orders.totalOrders.toString()}
-          icon="📦"
+          icon={CubeIcon}
+          iconColor="text-amber-600"
+          iconBgColor="bg-amber-50"
           trend={null}
         />
         <StatCard
           title="طلبات اليوم"
           value={analytics.orders.todayOrders.toString()}
-          icon="🆕"
+          icon={BoltIcon}
+          iconColor="text-cyan-600"
+          iconBgColor="bg-cyan-50"
           trend={null}
         />
         <StatCard
           title="إجمالي العملاء"
           value={analytics.customers.totalCustomers.toString()}
-          icon="👥"
+          icon={UsersIcon}
+          iconColor="text-teal-600"
+          iconBgColor="bg-teal-50"
           trend={null}
         />
         <StatCard
           title="عملاء جدد هذا الشهر"
           value={analytics.customers.newCustomersThisMonth.toString()}
-          icon="✨"
+          icon={StarIcon}
+          iconColor="text-pink-600"
+          iconBgColor="bg-pink-50"
           trend={null}
         />
       </div>
@@ -280,25 +310,33 @@ export function AdminDashboardClient() {
         <StatCard
           title="إجمالي الكتب"
           value={analytics.books.totalBooks.toString()}
-          icon="📚"
+          icon={BookOpenIcon}
+          iconColor="text-slate-600"
+          iconBgColor="bg-slate-50"
           trend={null}
         />
         <StatCard
           title="كتب منشورة"
           value={analytics.books.publishedBooks.toString()}
-          icon="✅"
+          icon={CheckCircleIcon}
+          iconColor="text-green-600"
+          iconBgColor="bg-green-50"
           trend={null}
         />
         <StatCard
           title="كتب قليلة المخزون"
           value={analytics.books.lowStockBooks.toString()}
-          icon="⚠️"
+          icon={ExclamationTriangleIcon}
+          iconColor="text-orange-600"
+          iconBgColor="bg-orange-50"
           trend={analytics.books.lowStockBooks > 0 ? "warning" : null}
         />
         <StatCard
           title="كتب غير متوفرة"
           value={analytics.books.outOfStockBooks.toString()}
-          icon="❌"
+          icon={XCircleIcon}
+          iconColor="text-red-600"
+          iconBgColor="bg-red-50"
           trend={analytics.books.outOfStockBooks > 0 ? "error" : null}
         />
       </div>
@@ -491,11 +529,13 @@ export function AdminDashboardClient() {
 type StatCardProps = {
   title: string;
   value: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
+  iconColor?: string;
+  iconBgColor?: string;
   trend: "up" | "down" | "warning" | "error" | null;
 };
 
-function StatCard({ title, value, icon, trend }: StatCardProps) {
+function StatCard({ title, value, icon: Icon, iconColor = "text-gray-600", iconBgColor = "bg-gray-50", trend }: StatCardProps) {
   const getTrendColor = () => {
     switch (trend) {
       case "up":
@@ -516,7 +556,7 @@ function StatCard({ title, value, icon, trend }: StatCardProps) {
       className={`rounded-2xl border p-6 shadow-sm transition hover:shadow-md ${getTrendColor()}`}
     >
       <div className="flex items-center justify-between">
-        <div>
+        <div className="flex-1">
           <p className="text-sm font-medium text-[color:var(--color-foreground-muted)]">
             {title}
           </p>
@@ -524,7 +564,9 @@ function StatCard({ title, value, icon, trend }: StatCardProps) {
             {value}
           </p>
         </div>
-        <div className="text-4xl">{icon}</div>
+        <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${iconBgColor} transition-transform hover:scale-110`}>
+          <Icon className={`h-6 w-6 ${iconColor}`} />
+        </div>
       </div>
     </div>
   );

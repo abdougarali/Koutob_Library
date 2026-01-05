@@ -3,12 +3,18 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  HomeIcon,
+  CubeIcon,
+  HeartIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
 
 const navItems = [
-  { href: "/dashboard", label: "الرئيسية", icon: "🏠" },
-  { href: "/dashboard/orders", label: "طلباتي", icon: "📦" },
-  { href: "/wishlist", label: "قائمة الأمنيات", icon: "❤️" },
-  { href: "/dashboard/profile", label: "ملفي الشخصي", icon: "👤" },
+  { href: "/dashboard", label: "الرئيسية", icon: HomeIcon },
+  { href: "/dashboard/orders", label: "طلباتي", icon: CubeIcon },
+  { href: "/wishlist", label: "قائمة الأمنيات", icon: HeartIcon },
+  { href: "/dashboard/profile", label: "ملفي الشخصي", icon: UserIcon },
 ];
 
 export function CustomerSidebar() {
@@ -55,6 +61,7 @@ export function CustomerSidebar() {
         <nav className="mt-8 flex flex-col gap-2 rounded-2xl border border-gray-100 bg-white p-4 lg:border-none lg:bg-transparent lg:p-0">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
+            const Icon = item.icon;
             return (
               <Link
                 key={item.href}
@@ -66,7 +73,7 @@ export function CustomerSidebar() {
                     : "text-[color:var(--color-foreground-muted)] hover:bg-gray-50"
                 }`}
               >
-                <span className="text-lg">{item.icon}</span>
+                <Icon className="h-5 w-5 flex-shrink-0" />
                 <span>{item.label}</span>
               </Link>
             );
